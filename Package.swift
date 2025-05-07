@@ -4,11 +4,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "x-simple-swift-rest-api",
+    name: "x-simple-swift-rest-api-server",
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .executableTarget(
-            name: "x-simple-swift-rest-api"),
+            name: "x-simple-swift-rest-api-server"),
+        .testTarget(
+            name: "tests",
+            dependencies: ["x-simple-swift-rest-api-server"]
+        ),
     ]
 )
