@@ -67,7 +67,7 @@ public final class Server {
                 
                 let request = try Request(buffer)
                 let response = try response(for: request)
-                response.rawValue.withCString { body in
+                _ = response.rawValue.withCString { body in
                     write(clientSocket, body, strlen(body))
                 }
                 
