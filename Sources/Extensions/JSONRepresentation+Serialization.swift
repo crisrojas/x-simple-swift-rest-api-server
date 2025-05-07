@@ -2,7 +2,7 @@
 
 import Foundation
 
-typealias JSON = [String: Any]
+public typealias JSON = [String: Any]
 extension JSON {
     public func serialized() throws -> Data {
         try JSONSerialization.data(withJSONObject: self)

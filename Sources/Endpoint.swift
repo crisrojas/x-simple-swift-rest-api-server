@@ -1,7 +1,7 @@
 
 import Foundation
 
-public typealias DataProvider = (String) throws -> [String:Any]
+public typealias DataProvider = (String) throws -> JSON
 
 public struct Endpoint {
     let path: String

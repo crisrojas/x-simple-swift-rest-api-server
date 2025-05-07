@@ -6,7 +6,7 @@ final class ServerTests: XCTestCase {
     
     func test_server_process_response() throws {
         
-        let todos: [String: Any] =  [
+        let todos: JSON =  [
             "todos": [
                 ["id": 1, "title": "10 pushups", "isChecked": false],
                 ["id": 2, "title": "Do laundry", "isChecked": true ]
