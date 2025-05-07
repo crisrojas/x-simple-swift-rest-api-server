@@ -1,6 +1,6 @@
 struct NoSchemaFound: Error {}
 final class Database {
-    static let shared = Database()
+    nonisolated(unsafe) static let shared = Database()
     let storage = ["recipes": Database.recipes()]
     private init() {}
     

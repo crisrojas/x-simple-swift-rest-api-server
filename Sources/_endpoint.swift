@@ -1,21 +1,25 @@
 
 import Foundation
 
-typealias DataProvider = (String) throws -> [String:Any]
+public typealias DataProvider = (String) throws -> [String:Any]
 
-struct Endpoint {
+public struct Endpoint {
     let path: String
     let provider: DataProvider
     
+    public init(path: String, provider: @escaping DataProvider) {
+        self.path = path
+        self.provider = provider
+    }
     
-    enum Error: Swift.Error {
+    public enum Error: Swift.Error {
         case requestedWrongPath(endpointPath: String, requestedPath: String)
         case noSchemaFoundOnDataProvider
         case noDataFoundOnDataProvider
         case unableToEncodeDataFromProvider
     }
     
-    func process(_ request: Request) throws(Error) -> Response {
+    public func process(_ request: Request) throws(Error) -> Response {
         guard request.path == path else {
             throw Error.requestedWrongPath(endpointPath: path, requestedPath: request.path)
         }
@@ -29,8 +33,8 @@ struct Endpoint {
     }
 }
 
-struct Request  {
-    enum Method: String {
+public struct Request  {
+    public enum Method: String {
         case get
         case post
         case patch
@@ -44,13 +48,19 @@ struct Request  {
         case noPathFound
     }
     
-    let method: Method
-    let body: Data?
-    let path: String
+    public let method: Method
+    public let body: Data?
+    public let path: String
+    
+    public init(method: Method, body: Data?, path: String) {
+        self.method = method
+        self.body = body
+        self.path = path
+    }
 }
 
 extension Request {
-    init(_ request: String) throws {
+    public init(_ request: String) throws {
         let components = request.components(separatedBy: "\n\n")
         let headers = components.first?.components(separatedBy: "\n") ?? []
         let payload = components.count > 1 ? components[1].trimmingCharacters(in: .whitespacesAndNewlines) : nil
@@ -81,7 +91,7 @@ extension Request {
         return method        
     }
     
-    static func body(_ payload: String?) throws -> Data? {
+    public static func body(_ payload: String?) throws -> Data? {
         guard let payload, let data = payload.data(using: .utf8) else { return nil }
         let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
         let normalizedData = try JSONSerialization.data(withJSONObject: jsonObject, options: [.prettyPrinted])
@@ -104,17 +114,23 @@ fileprivate extension Array {
 
 import Foundation
 
-struct Response {
-    let statusCode: Int
-    let contentType: ContentType
-    let data: Data?
+public struct Response {
+    public let statusCode: Int
+    public let contentType: ContentType
+    public let data: Data?
+    
+    public init(statusCode: Int, contentType: ContentType, data: Data?) {
+        self.statusCode = statusCode
+        self.contentType = contentType
+        self.data = data
+    }
     
     // Sorting keys alphabetically is necessary so we can
     // have a deterministic rawValue. Otherwise, the json response would
     // have keys in a random order making the fails tests.
     // While I don't like this solution because we're implementing production code
     // for the sake of tests, I haven't think yet of a good solution
-    var json: String? {
+    public var json: String? {
         guard 
         let data,
         let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
@@ -128,7 +144,7 @@ struct Response {
         json?.utf8.count ?? 0
     }
     
-    enum ContentType {
+    public enum ContentType {
         case applicationJSON
         case textHTML
         
@@ -140,7 +156,7 @@ struct Response {
         }
     }
     
-    var rawValue: String {
+    public var rawValue: String {
         headers + (json?.isNotEmpty == true ? "\n\n\(json!)" : "")
     }
     
@@ -155,7 +171,7 @@ struct Response {
 
 
 extension [String: Any] {
-    func serialized() throws -> Data {
+    public func serialized() throws -> Data {
         try JSONSerialization.data(withJSONObject: self)
     }
 }

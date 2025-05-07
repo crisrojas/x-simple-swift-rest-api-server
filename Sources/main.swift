@@ -1,11 +1,11 @@
 import Foundation
     
-final class Server {
+public final class Server {
     
     let port: UInt16
     var endpoints: [Endpoint]
     
-    init(port: UInt16 = 8080, endpoints: [Endpoint] = []) {
+    public init(port: UInt16 = 8080, endpoints: [Endpoint] = []) {
         self.port = port
         self.endpoints = endpoints
     }
@@ -120,68 +120,10 @@ final class Server {
         let description: String
     }
     
-    func response(for request: Request) throws -> Response {
+    public func response(for request: Request) throws -> Response {
         guard let endpoint = endpoints.first(where:{ $0.path == request.path }) else {
             throw ServerError.noEndpointFound(request.path)
         }
         return try endpoint.process(request)
     }
 }
-
-
-// MARK: - Server tests
-extension Response: Equatable {
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.statusCode == rhs.statusCode &&
-        lhs.contentType == rhs.contentType &&
-        lhs.data == rhs.data
-    }
-}
-
-final class ServerTests: TestCase {
-    
-    @objc func test_server_process_response() {
-        
-        do {
-            let todos: [String: Any] =  [
-                "todos": [
-                    ["id": 1, "title": "10 pushups", "isChecked": false],
-                    ["id": 2, "title": "Do laundry", "isChecked": true ]
-                ]
-            ]
-            
-            let endpoint = Endpoint(path: "todos") { path in
-                if path == "todos" {
-                    return todos
-                } else {
-                    throw Endpoint.Error.noSchemaFoundOnDataProvider
-                }
-            }
-            
-            let server = Server(endpoints: [endpoint])
-            let request = Request(method: .get, body: nil, path: "todos")
-            let response = try server.response(for: request)
-            
-            let expectedResponse = Response(
-                statusCode: 200, 
-                contentType: .applicationJSON, 
-                data: try todos.serialized()
-            )
-            
-            expect(response).toBe(.equalTo(expectedResponse))
-        } catch {
-            fail(error.localizedDescription)
-        }
-    }
-}
-
-RequestTests().run()
-ResponseTests().run()
-EndpointTests().run()
-ServerTests().run()
-
-let paths = ["recipes"]
-let endpoints = paths.map { Endpoint(path: $0, provider: Database.shared.get) }
-
-_ = Server(endpoints: endpoints)
-//.run()
