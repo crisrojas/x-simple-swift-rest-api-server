@@ -46,7 +46,7 @@ public struct Response {
     }
     
     public var rawValue: String {
-        headers + (json?.isNotEmpty == true ? "\n\n\(json!)" : "")
+        headers + (json?.isEmpty == false ? "\n\n\(json!)" : "")
     }
     
     var headers: String {
