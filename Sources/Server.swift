@@ -1,5 +1,5 @@
 import Foundation
-    
+
 public final class Server {
     
     let port: UInt16
@@ -75,8 +75,8 @@ public final class Server {
                 
             } catch let error as CustomError {
                 _ = Response(
-                    statusCode: 500, 
-                    contentType: .applicationJSON, 
+                    statusCode: 500,
+                    contentType: .applicationJSON,
                     data: try! error.encoded()
                 ).rawValue.withCString { body in
                     write(clientSocket, body, strlen(body))
@@ -85,8 +85,8 @@ public final class Server {
                 close(clientSocket)
             } catch let error as ServerError {
                 _ = Response(
-                    statusCode: 500, 
-                    contentType: .applicationJSON, 
+                    statusCode: 500,
+                    contentType: .applicationJSON,
                     data: try! CustomError(code: 500, description: error.message).encoded()
                 ).rawValue.withCString { body in
                     write(clientSocket, body, strlen(body))
@@ -106,7 +106,7 @@ public final class Server {
         
         var message: String {
             switch self {
-                case .noEndpointFound(let path): return "No endpoint found for \(path)"
+            case .noEndpointFound(let path): return "No endpoint found for \(path)"
             }
         }
     }

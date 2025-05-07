@@ -19,9 +19,9 @@ final class EndpointTests: XCTestCase {
             }
         }
         
-            let request = Request(method: .get, body: nil, path: "todos")
-            let response = try endpoint.process(request)
-            let expectedJSON = "{\"todos\":[{\"id\":1,\"isChecked\":false,\"title\":\"10 pushups\"},{\"id\":2,\"isChecked\":true,\"title\":\"Do laundry\"}]}"
+        let request = Request(method: .get, body: nil, path: "todos")
+        let response = try endpoint.process(request)
+        let expectedJSON = "{\"todos\":[{\"id\":1,\"isChecked\":false,\"title\":\"10 pushups\"},{\"id\":2,\"isChecked\":true,\"title\":\"Do laundry\"}]}"
         
         XCTAssertEqual(response.json, expectedJSON)
     }

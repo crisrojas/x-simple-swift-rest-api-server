@@ -29,8 +29,6 @@ final class ResponseTests: XCTestCase {
             "isChecked": false
         ].serialized()
         
-        
-        
         let expectedValue = """
             HTTP/1.1 200 OK
             Content-Type: application/json; charset=utf-8

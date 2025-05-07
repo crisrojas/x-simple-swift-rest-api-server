@@ -20,10 +20,10 @@ public struct Response {
     // While I don't like this solution because we're implementing production code
     // for the sake of tests, I haven't think yet of a good solution
     public var json: String? {
-        guard 
-        let data,
-        let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
-        let jsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: [.sortedKeys]) else {
+        guard
+            let data,
+            let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+            let jsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: [.sortedKeys]) else {
             return nil
         }
         return String(data: jsonData, encoding: .utf8)
@@ -39,8 +39,8 @@ public struct Response {
         
         var value: String {
             switch self {
-                case .applicationJSON: return "application/json"
-                case .textHTML: return "text/html"
+            case .applicationJSON: return "application/json"
+            case .textHTML: return "text/html"
             }
         }
     }

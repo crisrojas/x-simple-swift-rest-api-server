@@ -12,13 +12,12 @@ final class RequestTests: XCTestCase {
         let patch = "PATCH /api/v1/ / HTTP/1.1"
         let delete = "DELETE /api/v1/ / HTTP/1.1"
         
-            let getRequest = try Request(get)
-            let postRequest = try Request(post)
-            let putRequest = try Request(put)
-            let patchRequest = try Request(patch)
-            let deleteRequest = try Request(delete)
+        let getRequest = try Request(get)
+        let postRequest = try Request(post)
+        let putRequest = try Request(put)
+        let patchRequest = try Request(patch)
+        let deleteRequest = try Request(delete)
         
-            
         XCTAssertEqual(getRequest.method, .get, "GET")
         XCTAssertEqual(postRequest.method, .post, "POST")
         XCTAssertEqual(putRequest.method, .put, "PUT")
@@ -34,27 +33,26 @@ final class RequestTests: XCTestCase {
         }
     }
     
-    
     func test_payload_normalization() throws {
         let string1 = """
         POST / HTTP/1.1
-
+        
         {"key":"value","anotherKey":123}
         """
         
         let string2 = """
         POST / HTTP/1.1
-
+        
         {
             "key":"value",
             "anotherKey":123
         }
         """
         
-            let request1 = try Request(string1)
-            let request2 = try Request(string2)
-            
-            let expectedPayload = try Request.body("{\"key\":\"value\",\"anotherKey\":123}")
+        let request1 = try Request(string1)
+        let request2 = try Request(string2)
+        
+        let expectedPayload = try Request.body("{\"key\":\"value\",\"anotherKey\":123}")
         
         XCTAssertEqual(request2.body, expectedPayload, "Request is normalized")
         XCTAssertEqual(request1.body, request2.body, "Request have same body even if different initial format")
