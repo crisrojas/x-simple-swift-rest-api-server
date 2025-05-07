@@ -65,10 +65,8 @@ public final class Server {
             
             do {
                 
-                dp(String(bytes: buffer, encoding: .utf8) ?? "")
                 let request = try Request(buffer)
                 let response = try response(for: request)
-                dp(response)
                 response.rawValue.withCString { body in
                     write(clientSocket, body, strlen(body))
                 }
