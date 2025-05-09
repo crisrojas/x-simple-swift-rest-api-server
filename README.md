@@ -1,6 +1,6 @@
 # Simple Swift REST-API Server
 
-Exploration on how to build a lightweight minimal **REST API server** in Swift for learning purposes.
+Exploration on how to build a lightweight dynamic minimal **REST API server** in Swift for learning purposes.
 
 ## Desired API
 
